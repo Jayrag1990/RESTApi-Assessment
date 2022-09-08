@@ -7,7 +7,7 @@
       <Diagram DiagramId="1731f09d88f340298a94a176e5543d2e" Name="Diagram1">
         <EntityTypeShape EntityType="EntityModel.UserTable" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="EntityModel.TweetLike" Width="1.5" PointX="3.375" PointY="0.75" />
-        <EntityTypeShape EntityType="EntityModel.TweetPost" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="EntityModel.TweetPost" Width="1.5" PointX="5.875" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

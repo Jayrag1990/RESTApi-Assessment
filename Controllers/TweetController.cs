@@ -25,11 +25,6 @@ namespace Assessment.Controllers
             ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
             var result = _tweetDataProvider.AddTweet(model, SessionHelper.UserDetail.CurrentUser);
 
-            if (!result.IsSuccess)
-            {
-                return GetErrorResult(result);
-            }
-
             return Ok(result);
         }
 
@@ -44,10 +39,19 @@ namespace Assessment.Controllers
             ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
             var result = _tweetDataProvider.GetTweetById(id);
 
-            if (!result.IsSuccess)
+            return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("retweet/{id}")]
+        public IHttpActionResult ReTweet(long id)
+        {
+            if (!ModelState.IsValid)
             {
-                return GetErrorResult(result);
+                return BadRequest(ModelState);
             }
+            ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
+            var result = _tweetDataProvider.ReTweetById(id, SessionHelper.UserDetail.CurrentUser);
 
             return Ok(result);
         }
@@ -61,12 +65,7 @@ namespace Assessment.Controllers
                 return BadRequest(ModelState);
             }
             ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
-            var result = _tweetDataProvider.DeleteTweetById(id);
-
-            if (!result.IsSuccess)
-            {
-                return GetErrorResult(result);
-            }
+            var result = _tweetDataProvider.DeleteTweetById(id, SessionHelper.UserDetail.CurrentUser);
 
             return Ok(result);
         }
@@ -82,11 +81,6 @@ namespace Assessment.Controllers
             ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
             var result = _tweetDataProvider.LikeTweetById(id, SessionHelper.UserDetail.CurrentUser);
 
-            if (!result.IsSuccess)
-            {
-                return GetErrorResult(result);
-            }
-
             return Ok(result);
         }
 
@@ -100,11 +94,6 @@ namespace Assessment.Controllers
             }
             ITweetDataProvider _tweetDataProvider = new TweetDataProvider();
             var result = _tweetDataProvider.UnLikeTweetById(id, SessionHelper.UserDetail.CurrentUser);
-
-            if (!result.IsSuccess)
-            {
-                return GetErrorResult(result);
-            }
 
             return Ok(result);
         }

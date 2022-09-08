@@ -18,5 +18,8 @@ namespace Assessment.Models.EntityModel
         public string Message { get; set; }
         public long CreatedBy { get; set; }
         public System.DateTime CreatedDate { get; set; }
+        public bool IsDelete { get; set; }
+        public System.DateTime ModifiedDate { get; set; }
+        public long ModifiedBy { get; set; }
     }
 }

@@ -12,7 +12,8 @@ namespace Assessment.Infrastructure.DataProvider
     {
         ServiceResponse GetTweetById(long id);
         ServiceResponse AddTweet(TweetAddRequestModel model, UserTable currentUser);
-        ServiceResponse DeleteTweetById(long id);
+        ServiceResponse ReTweetById(long id, UserTable currentUser);
+        ServiceResponse DeleteTweetById(long id, UserTable currentUser);
         ServiceResponse LikeTweetById(long id, UserTable currentUser);
         ServiceResponse UnLikeTweetById(long id, UserTable currentUser);
     }
@@ -39,33 +40,65 @@ namespace Assessment.Infrastructure.DataProvider
             var _context = new Entities();
             var saveModel = new TweetPost();
             saveModel.Message = model.Message;
+            saveModel.IsDelete = false;
             saveModel.CreatedBy = currentUser.UserId;
             saveModel.CreatedDate = DateTime.UtcNow;
+            saveModel.ModifiedBy = currentUser.UserId;
+            saveModel.ModifiedDate = DateTime.UtcNow;
 
             _context.TweetPosts.AddOrUpdate(saveModel);
             _context.SaveChanges();
 
             response.IsSuccess = true;
+            response.Data = saveModel;
             response.Message = "The Tweet has been successfully added";
             return response;
         }
 
-        public ServiceResponse DeleteTweetById(long id)
+        public ServiceResponse ReTweetById(long id, UserTable currentUser)
         {
             ServiceResponse response = new ServiceResponse();
 
             var _context = new Entities();
-            var tweet = _context.TweetPosts.SingleOrDefault(x => x.TweetId == id);
-            if (tweet == null)
+            var saveModel = _context.TweetPosts.SingleOrDefault(x => x.TweetId == id && x.IsDelete);
+            if (saveModel == null)
             {
                 response.IsSuccess = false;
-                response.Message = "Not found tweet";
-
+                response.Message = "tweet live or not found ";
                 return response;
             }
-            _context.TweetPosts.Remove(tweet);
+
+            saveModel.IsDelete = false;
+            saveModel.ModifiedBy = currentUser.UserId;
+            saveModel.ModifiedDate = DateTime.UtcNow;
+
+            _context.TweetPosts.AddOrUpdate(saveModel);
             _context.SaveChanges();
 
+            response.IsSuccess = true;
+            response.Data = saveModel;
+            response.Message = "SuccessfullyT Re-Tweet";
+            return response;
+        }
+
+        public ServiceResponse DeleteTweetById(long id, UserTable currentUser)
+        {
+            ServiceResponse response = new ServiceResponse();
+
+            var _context = new Entities();
+            var saveModel = _context.TweetPosts.SingleOrDefault(x => x.TweetId == id && !x.IsDelete);
+            if (saveModel == null)
+            {
+                response.IsSuccess = false;
+                response.Message = "tweet already or not found ";
+                return response;
+            }
+            saveModel.IsDelete = true;
+            saveModel.ModifiedBy = currentUser.UserId;
+            saveModel.ModifiedDate = DateTime.UtcNow;
+
+            _context.TweetPosts.AddOrUpdate(saveModel);
+            _context.SaveChanges();
             response.IsSuccess = true;
             response.Message = "Successfully delete tweet";
             return response;
