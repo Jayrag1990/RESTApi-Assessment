@@ -42,7 +42,7 @@ namespace Assessment.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("retweet/{id}")]
         public IHttpActionResult ReTweet(long id)
         {
